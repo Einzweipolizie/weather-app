@@ -1,0 +1,43 @@
+.form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body{
+    text-align: center;
+}
+
+.loading{
+    animation: fade 1s ease-in-out infinite;
+}
+
+@keyframes fade{
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+
+.hidden{
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#settings{
+    position: absolute;
+    top: 100px;
+    left:100px;
+    font-size: large;
+    color: black;
+    text-decoration: underline;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    
+
+        
+}
+

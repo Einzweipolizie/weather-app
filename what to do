@@ -1,0 +1,53 @@
+plan list:
+1: orgnize the files
+
+2 : do that the ux(loading and error states)
+
+3:
+Suggestions disappear when:
+A city is selected
+Input is cleared
+User clicks outside
+Suggestions do not overlap content
+Keyboard users are not blocked
+
+4:
+key board navigation
+Arrow up / down to move through suggestions
+Enter to select
+
+5:
+debounce API calls
+
+Right now, every keystroke hits the API.
+
+You should learn:
+
+Debouncing input (300–500ms)
+
+Reducing API load
+
+Improving performance
+
+This is a professional frontend skill.
+
+
+
+
+need to do so then you type an city there will be hitns how to write the right name if the city
+and do it normally
+
+css 
+
+
+need to change the button of(°C / °F°) so it will be betiful
+
+add a dark theme
+
+
+can change the theme in the contrast of the temp the site is showing
+
+orgnize and add more files with each file have some catgory
+
+
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather app</title>
+    <link rel="stylesheet" href="weather.css">
+</head>
+<body>
+
+    <form class="form" id="weatherInput">
+        <label for="cityInput">what city you want?</label>
+        <input type="text" id="cityInput" placeholder="Enter city">
+        <ul id="suggestions" class="hidden"></ul>
+        <button type="submit" id="geoLoactionBtn">use my geoloaction</button>
+
+        <button type="submit" id="getweather">submit</button>
+        
+    </form>
+
+    <div id="weatherResult"></div>
+
+    <div id="settings" class="hidden">
+        <h2>settings:</h2>
+        <button type="button" id="toggleUnit">click to change from °C / °F°</button>
+    </div>
+
+    <script src="weather.js"></script>
+</body>
+</html>
