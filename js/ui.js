@@ -1,0 +1,49 @@
+import {state} from "./state.js"; 
+
+
+export function renderweather(){
+  if(!state.weatherData) return;
+
+
+    const weatheResult = document.getElementById("weatherResult");
+
+
+      const tempC = state.weatherData.main?.temp;
+      const feelsC= state.weatherData.main.feels_like;
+
+      if (tempC == null || feelsC == null) {
+        weatheResult.textContent = "Weather data unavailable.";
+        return;
+      }
+
+      const temp = 
+        state.unit === "C" 
+        ? `${tempC.toFixed(1)} °C`
+        : `${((tempC * 9/5) + 32).toFixed(1)} F`;
+
+      const feelsLike = 
+        state.unit === "C" 
+        ? `${feelsC.toFixed(1)} °C`
+        : `${((feelsC * 9/5) + 32).toFixed(1)} F`;
+
+
+
+
+      weatheResult.innerHTML =`
+        <h2>${state.weatherData.name}</h2>
+        <p>temperature: ${temp ?? "no data"}</p>
+        <p>feels like: ${feelsLike?? "no data"}</p>
+        <p>condition: ${state.weatherData.weather?.[0]?.description ?? "no data"}</p>
+
+      `;
+    };
+
+;
+
+
+
+export function updateUnitIon(){
+  const icon = document.getElementById("toggleUnit");
+
+  icon.textContent = state.unit === "C" ? "🌡️ °F": "🌡️ °C";
+}

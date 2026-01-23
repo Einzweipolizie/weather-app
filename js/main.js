@@ -1,14 +1,18 @@
-const apiKey = "23d54e534f55b4e2153ac5c094250436";
+import {getWeather} from "./API.js";
+import {state} from "./state.js"; //need to change
+import {renderweather, updateUnitIon} from "./ui.js";
+
+
+
 //lets belive this works
-let weatherdata = null;
-let unit = "C";
+
 
 document.getElementById("weatherInput").addEventListener("submit", e => {
   e.preventDefault(); // stops form submission completely
 });
 
-document.getElementById("getweather").addEventListener("click", async (e) => {
-  e.preventDefault()
+document.getElementById("getweather").addEventListener("click", async (e) => { //WORKS
+  e.preventDefault()  
 
   const city = document.getElementById("cityInput").value.trim();
 
@@ -16,22 +20,10 @@ document.getElementById("getweather").addEventListener("click", async (e) => {
     return;
   }
 
-
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
-
-  try{
-    const response = await fetch(url)
-    const data = await response.json()
-    console.log(data); 
-    weatherdata = data;
-    renderweather();
-    showSettings();
-    updateUnitIon();
-
-
-  }catch(error){
-    console.error("API error", error);
-  }
+  await getWeather(city);
+  renderweather();
+  updateUnitIon();  
+  console.log(state.weatherData);
   
 });
 
@@ -80,7 +72,7 @@ async function geolocationshow(lat,lon){
       const response = await fetch(url)
       const data = await response.json()
       console.log(data);
-      weatherdata = data;
+      weatherData = data;
       renderweather();
       showSettings();
       updateUnitIon();
@@ -97,47 +89,10 @@ async function geolocationshow(lat,lon){
 }
 
 
-function renderweather(){
-  if(!weatherdata)return;
 
-
-    const weatheResult = document.getElementById("weatherResult");
-
-
-      const tempC = weatherdata.main?.temp;
-      const feelsC= weatherdata.main.feels_like;
-
-      if (tempC == null || feelsC == null) {
-        weatheResult.textContent = "Weather data unavailable.";
-        return;
-      }
-
-      const temp = 
-        unit === "C" 
-        ? `${tempC.toFixed(1)} °C`
-        : `${((tempC * 9/5) + 32).toFixed(1)} F`;
-
-      const feelsLike = 
-        unit === "C" 
-        ? `${feelsC.toFixed(1)} °C`
-        : `${((feelsC * 9/5) + 32).toFixed(1)} F`;
-
-
-
-
-      weatheResult.innerHTML =`
-        <h2>${weatherdata.name}</h2>
-        <p>temperature: ${temp ?? "no data"}</p>
-        <p>feels like: ${feelsLike?? "no data"}</p>
-        <p>condition: ${weatherdata.weather?.[0]?.description ?? "no data"}</p>
-
-      `;
-    };
-
-;
 
 document.getElementById("toggleUnit").addEventListener("click", () => {
-if(!weatherdata) return; 
+if(!weatherData) return; 
 
   unit = unit === "C" ? "F" : "C";
 
@@ -147,11 +102,7 @@ if(!weatherdata) return;
 });
 
 
-function updateUnitIon(){
-  const icon = document.getElementById("toggleUnit");
 
-  icon.textContent = unit === "C" ? "🌡️ °F": "🌡️ °C";
-}
 
 
 function showSettings(){
@@ -219,7 +170,7 @@ async function fetchweatherbycoords(lat, lon){
       const response = await fetch(url)
       const data = await response.json()
       console.log(data);
-      weatherdata = data;
+      weatherData = data;
       renderweather();
       showSettings();
       updateUnitIon();
