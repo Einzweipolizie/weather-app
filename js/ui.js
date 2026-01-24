@@ -47,3 +47,22 @@ export function updateUnitIon(){
 
   icon.textContent = state.unit === "C" ? "🌡️ °F": "🌡️ °C";
 }
+
+
+export function showSettings(){
+  document.getElementById("settings").classList.remove("hidden");
+}
+
+
+export function hideSettings(){
+  document.getElementById("settings").classList.add("hidden");
+}
+
+export function showSuggestions(){
+  document.getElementById("suggestions").classList.remove("hidden");
+}
+
+export function hidsSuggestions(){
+  document.getElementById("suggestions").classList.add("hidden");
+}
+
