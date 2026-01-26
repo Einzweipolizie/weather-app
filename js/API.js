@@ -5,6 +5,15 @@ import {renderweather, updateUnitIon,showSettings,hideSettings,showSuggestions,h
 const apiKey = "23d54e534f55b4e2153ac5c094250436";
 
 
+function debounce(fn, delay  = 300){
+    let timer;
+    return (...args) =>{
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
+}
+
+
 export async function getWeather(city) {
     if(!city) return null;
 
@@ -73,60 +82,53 @@ export async function fetchWeatherByCoords(lat, lon) {
 
 
 
-export function initEvents(){
-    const cityInput = document.getElementById("cityInput");
-    const list = document.getElementById("suggestions");
+export function initEvents() {
+  const cityInput = document.getElementById("cityInput");
+  const list = document.getElementById("suggestions");
 
-    cityInput.addEventListener("input",async () =>{
-        const text = cityInput.value.trim();
+  const handleCityInput = async () => {
+    const text = cityInput.value.trim();
 
-        if(text.length < 2){
-            hidsSuggestions();
-            
-            return;
-        }
-        else{
-            showSuggestions();
-        }
-    
+    if (text.length < 2) {
+      hidsSuggestions();
+      return;
+    } else {
+      showSuggestions();
+    }
 
-    const cities = await fetchCitySuggestions(text)
-
-    console.log(cities);
+    const cities = await fetchCitySuggestions(text);
 
     list.innerHTML = "";
 
+    cities.forEach(city => {
+      const li = document.createElement("li");
+      li.textContent = `${city.name}, ${city.country}`;
 
+      li.addEventListener("click", async () => {
+        cityInput.value = `${city.name}, ${city.country}`;
+        list.innerHTML = "";
 
-    cities.forEach(city =>{
-        const li = document.createElement("li");
-        li.textContent = `${city.name}, ${city.country}`;
+        await fetchWeatherByCoords(city.lat, city.lon);
+        renderweather();
+        showSettings();
+        updateUnitIon();
+        hidsSuggestions();
+      });
 
-        li.addEventListener("click",async () =>{
-            cityInput.value = `${city.name}, ${city.country}`;
-            suggestions.innerHTML = "";
-
-            await fetchWeatherByCoords(city.lat, city.lon)
-
-            renderweather();
-            showSettings();
-            updateUnitIon();
-            hidsSuggestions();
-        })
-
-        list.addEventListener("click", (e) => {
-            if(e.target === list){
-                hidsSuggestions();
-            }
-        })
-
-        
-
-        list.appendChild(li);
-    })
-
+      list.appendChild(li);
     });
+  };
 
+  // ✅ debounce created ONCE
+  const debouncedHandler = debounce(handleCityInput, 400);
 
+  // ✅ listener attached ONCE
+  cityInput.addEventListener("input", debouncedHandler);
 
+  // ✅ optional: hide suggestions when clicking background of list
+  list.addEventListener("click", (e) => {
+    if (e.target === list) {
+      hidsSuggestions();
+    }
+  });
 }
