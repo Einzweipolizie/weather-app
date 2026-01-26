@@ -17,11 +17,7 @@ export async function getWeather(city) {
 
         state.weatherData = data;
         return data;
-        // console.log(data); 
-        // weatherData = data;
-        // renderweather();       that was before 
-        // showSettings();
-        // updateUnitIon();
+
 
     }catch(error){
         console.error("API error", error);
@@ -94,7 +90,7 @@ export function initEvents(){
         }
     
 
-        const cities = await fetchCitySuggestions(text)
+    const cities = await fetchCitySuggestions(text)
 
     console.log(cities);
 
@@ -115,7 +111,16 @@ export function initEvents(){
             renderweather();
             showSettings();
             updateUnitIon();
+            hidsSuggestions();
         })
+
+        list.addEventListener("click", (e) => {
+            if(e.target === list){
+                hidsSuggestions();
+            }
+        })
+
+        
 
         list.appendChild(li);
     })

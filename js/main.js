@@ -24,6 +24,8 @@ document.getElementById("getweather").addEventListener("click", async (e) => { /
   renderweather();
   showSettings();
   updateUnitIon();  
+  hidsSuggestions();
+
   console.log(state.weatherData);
   
 });
