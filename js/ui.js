@@ -51,6 +51,7 @@ export function updateUnitIon(){
 
 export function showSettings(){
   document.getElementById("settings").classList.remove("hidden");
+  document.getElementById("settings").tabIndex = 0;
 }
 
 
@@ -66,3 +67,14 @@ export function hidsSuggestions(){
   document.getElementById("suggestions").classList.add("hidden");
 }
 
+export function highlightSuggestion(index) {
+  const items = document.querySelectorAll("#suggestions li");
+  items.forEach((li, i) => {
+    if (i === index) {
+      li.classList.add("highlighted");
+      li.scrollIntoView({ block: "nearest" }); // Keeps selection visible
+    } else {
+      li.classList.remove("highlighted");
+    }
+  });
+}

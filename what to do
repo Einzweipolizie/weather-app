@@ -28,7 +28,7 @@ Arrow keys = move inside list only
 Enter = select the active item
 
 5:
-debounce API calls
+debounce API calls (done)
 
 Right now, every keystroke hits the API. (use the debounce function for that)
 

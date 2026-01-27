@@ -85,10 +85,24 @@ export async function fetchWeatherByCoords(lat, lon) {
 export function initEvents() {
   const cityInput = document.getElementById("cityInput");
   const list = document.getElementById("suggestions");
+  
+  let activeIndex = -1; 
+  let suggestionsData = [];
+
+  // Reusable selection logic for Click and Enter key
+  const selectCity = async (city) => {
+    cityInput.value = `${city.name}, ${city.country}`;
+    list.innerHTML = "";
+    await fetchWeatherByCoords(city.lat, city.lon);
+    renderweather();
+    showSettings();
+    updateUnitIon();
+    hidsSuggestions();
+    activeIndex = -1;
+  };
 
   const handleCityInput = async () => {
     const text = cityInput.value.trim();
-
     if (text.length < 2) {
       hidsSuggestions();
       return;
@@ -97,37 +111,43 @@ export function initEvents() {
     }
 
     const cities = await fetchCitySuggestions(text);
-
+    suggestionsData = cities;
+    activeIndex = -1; 
     list.innerHTML = "";
 
-    cities.forEach(city => {
+    cities.forEach((city, index) => {
       const li = document.createElement("li");
       li.textContent = `${city.name}, ${city.country}`;
-
-      li.addEventListener("click", async () => {
-        cityInput.value = `${city.name}, ${city.country}`;
-        list.innerHTML = "";
-
-        await fetchWeatherByCoords(city.lat, city.lon);
-        renderweather();
-        showSettings();
-        updateUnitIon();
-        hidsSuggestions();
-      });
-
+      li.addEventListener("click", () => selectCity(city));
       list.appendChild(li);
     });
   };
 
-  // ✅ debounce created ONCE
   const debouncedHandler = debounce(handleCityInput, 400);
-
-  // ✅ listener attached ONCE
   cityInput.addEventListener("input", debouncedHandler);
 
-  // ✅ optional: hide suggestions when clicking background of list
-  list.addEventListener("click", (e) => {
-    if (e.target === list) {
+  // Keyboard Navigation
+  cityInput.addEventListener("keydown", (e) => {
+    const items = list.querySelectorAll("li");
+    if (items.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      activeIndex = (activeIndex + 1) % items.length;
+      highlightSuggestion(activeIndex);
+    } 
+    else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      activeIndex = (activeIndex - 1 + items.length) % items.length;
+      highlightSuggestion(activeIndex);
+    } 
+    else if (e.key === "Enter") {
+      if (activeIndex > -1) {
+        e.preventDefault();
+        selectCity(suggestionsData[activeIndex]);
+      }
+    }
+    else if (e.key === "Escape") {
       hidsSuggestions();
     }
   });

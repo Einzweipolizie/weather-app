@@ -22,9 +22,10 @@ document.getElementById("getweather").addEventListener("click", async (e) => { /
 
   await getWeather(city);
   renderweather();
-  showSettings();
+  showSetttabindexings();
   updateUnitIon();  
   hidsSuggestions();
+  
 
   console.log(state.weatherData);
   
@@ -87,4 +88,10 @@ if(!state.weatherData) return;
 
 document.addEventListener("DOMContentLoaded", () => {
   initEvents();
+});
+
+
+
+document.addEventListener("keydown", function (e) {
+  console.log(e.key);
 });

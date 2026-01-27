@@ -41,3 +41,15 @@ body{
         
 }
 
+
+/* weather.css */
+#suggestions li {
+    padding: 8px;
+    cursor: pointer;
+    list-style: none;
+}
+
+#suggestions li.highlighted {
+    background-color: #e0e0e0; /* Or any color that fits your theme */
+    outline: none;
+}
