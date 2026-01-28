@@ -36,6 +36,10 @@ export function renderweather(){
         <p>condition: ${state.weatherData.weather?.[0]?.description ?? "no data"}</p>
 
       `;
+
+      if(tempC > 10){
+        document.body.classList.toggle("range-10-20");
+      }
     };
 
 ;

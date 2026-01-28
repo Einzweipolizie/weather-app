@@ -53,3 +53,8 @@ body{
     background-color: #e0e0e0; /* Or any color that fits your theme */
     outline: none;
 }
+
+
+body.range-10-20{
+    background-color: yellow;
+}
