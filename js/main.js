@@ -22,7 +22,7 @@ document.getElementById("getweather").addEventListener("click", async (e) => { /
 
   await getWeather(city);
   renderweather();
-  showSetttabindexings();
+  showSettings();
   updateUnitIon();  
   hidsSuggestions();
   

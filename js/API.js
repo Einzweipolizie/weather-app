@@ -126,6 +126,18 @@ export function initEvents() {
   const debouncedHandler = debounce(handleCityInput, 400);
   cityInput.addEventListener("input", debouncedHandler);
 
+
+  function highlightSuggestion(index) {
+    const items = list.querySelectorAll("li");
+    items.forEach(li => li.classList.remove("highlighted")); // Match the CSS
+
+    const current = items[index];
+    if (current) {
+      current.classList.add("highlighted"); // Match the CSS
+      current.scrollIntoView({ block: "nearest" });
+    }
+  }
+
   // Keyboard Navigation
   cityInput.addEventListener("keydown", (e) => {
     const items = list.querySelectorAll("li");
@@ -149,6 +161,8 @@ export function initEvents() {
     }
     else if (e.key === "Escape") {
       hidsSuggestions();
+      list.innerHTML = "";
+      activeIndex = -1;
     }
   });
 }
