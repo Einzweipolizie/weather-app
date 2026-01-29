@@ -1,108 +1,317 @@
-.form{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
+/* Improved CSS for your weather app
+   - Preserves all existing class/ID behavior and selectors
+   - Adds variables, accessibility improvements, reduced-motion support, and cleaner spacing
+   - Keep the same semantics: .form, .loading, .hidden, #settings, #suggestions, body.* weather/time classes, #timeDisplay
+*/
+
+:root{
+  /* spacing / sizing */
+  --gap: 10px;
+  --radius: 30px;
+  --time-font-size: clamp(1rem, 1.5vw, 1.5rem);
+
+  /* colors */
+  --glass-bg: rgba(255,255,255,0.18);
+  --glass-border: rgba(255,255,255,0.25);
+  --suggestion-hover: #e8e8e8; /* fall-back for highlighted */
+  --suggestion-text: #111;
+  --accent: #2193b0;
+}
+
+/* Layout --------------------------------------------------------------- */
+html, body{
+  height: 100%;
 }
 
 body{
-    min-height: 100vh;
-    text-align: center;
-    transition: background 0.5s ease; /* Smoothly fades the colors */
-    background-repeat: no-repeat;
-    background-size: cover;
+  min-height: 100vh; /* preserve your existing behavior */
+  min-height: 100dvh; /* mobile safe */
+  text-align: center;
+  transition: background 0.5s ease, color 0.25s ease;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  color: inherit; /* lets the timeDisplay inherit color */
 }
 
+/* Form behaviour preserved */
+.form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: 12px; /* small breathing room */
+}
+
+/* Loading animation (keeps your fade keyframes) ----------------------- */
 .loading{
-    animation: fade 1s ease-in-out infinite;
+  animation: fade 1s ease-in-out infinite;
 }
 
 @keyframes fade{
-    0% { opacity: 0.2; }
-    50% { opacity: 1; }
-    100% { opacity: 0.2; }
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
 }
 
+/* Respect reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce){
+  .loading{ animation: none; }
+  *{ transition: none !important; }
+}
 
+/* Hidden state: keep display:none as you had so elements don't occupy space */
 .hidden{
-    display: none;
-    opacity: 0;
-    pointer-events: none;
+  display: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
+/* Settings anchor (keeps same coordinates but improves readability) --- */
 #settings{
-    position: absolute;
-    top: 100px;
-    left:100px;
-    font-size: large;
-    color: black;
-    text-decoration: underline;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-    
-
-        
+  position: absolute; /* preserved from your original */
+  top: 100px;
+  left: 100px;
+  font-size: large;
+  color: black;
+  text-decoration: underline;
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  z-index: 1000;
 }
 
+#settings:focus,
+#settings:hover{
+  transform: translateY(-2px);
+  outline: none;
+}
 
-/* weather.css */
+/* Suggestions list (keeps your li selectors, improves accessibility) */
+#suggestions{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 300px; /* prevents runaway lists */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 #suggestions li {
-    padding: 8px;
-    cursor: pointer;
-    list-style: none;
+  padding: 8px;
+  cursor: pointer;
+  list-style: none; /* preserved */
+  border-radius: 8px;
+  margin: 4px 6px;
+  color: var(--suggestion-text);
 }
 
-#suggestions li.highlighted {
-    background-color: #e0e0e0; /* Or any color that fits your theme */
-    outline: none;
+/* highlighted state preserved but more visible and keyboard-friendly */
+#suggestions li.highlighted,
+#suggestions li:focus{
+  background-color: var(--suggestion-hover);
+  outline: 2px solid rgba(0,0,0,0.06);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
 }
 
-
+/* Weather classification backgrounds (keeps your class names & gradients) */
 body.freezing { background: linear-gradient(to bottom, #778899, #e0ffff); }
-body.cool { background: linear-gradient(to bottom, #2980b9, #6dd5fa); }
-body.mild { background: linear-gradient(to bottom, #f7971e, #ffd200); }
-body.hot { background: linear-gradient(to bottom, #e67e22, #e74c3c); }  
-/* Morning (5:00 AM - 11:59 AM) - Soft blues and pinks like a sunrise */
-body.morning {
-    background: linear-gradient(to bottom, #ffafbd, #ffc3a0, #2193b0);
-    color: #2c3e50;
+body.cool    { background: linear-gradient(to bottom, #2980b9, #6dd5fa); }
+body.mild    { background: linear-gradient(to bottom, #f7971e, #ffd200); }
+body.hot     { background: linear-gradient(to bottom, #e67e22, #e74c3c); }
+
+/* Time of day palettes (preserved class names with minor polish) */
+body.morning{
+  background: linear-gradient(to bottom, #ffafbd, #ffc3a0, #2193b0);
+  color: #2c3e50;
 }
 
-/* Afternoon (12:00 PM - 5:59 PM) - Bright, clear sky blue */
-body.afternoon {
-    background: linear-gradient(to bottom, #2980b9, #6dd5fa, #ffffff);
-    color: #1a1a1a;
+body.afternoon{
+  background: linear-gradient(to bottom, #2980b9, #6dd5fa, #ffffff);
+  color: #1a1a1a;
 }
 
-/* Evening (6:00 PM - 8:59 PM) - Deep oranges and purples for sunset */
-body.evening {
-    background: linear-gradient(to bottom, #41295a, #2F0743, #fb8c00);
-    color: white;
+body.evening{
+  background: linear-gradient(to bottom, #41295a, #2F0743, #fb8c00);
+  color: white;
 }
 
-/* Night (9:00 PM - 4:59 AM) - Dark midnight blues and blacks */
-body.night {
-    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-    color: #ecf0f1;
+body.night{
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+  color: #ecf0f1;
 }
 
-
-/* weather.css */
+/* Time display — keep fixed position and look, but make it responsive */
 #timeDisplay {
-    position: fixed;   /* Sticks to the screen even if you scroll */
-    top: 20px;
-    right: 20px;
-    font-family: 'Courier New', Courier, monospace; /* Monospace keeps numbers from jumping */
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: inherit;    /* Takes color from the body (white in night, black in day) */
-    background: rgba(255, 255, 255, 0.2); /* Semi-transparent box */
-    padding: 10px 20px;
-    border-radius: 30px;
-    backdrop-filter: blur(8px); /* Modern blurry glass effect */
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    z-index: 9999;     /* Makes sure it stays above everything else */
+  position: fixed;   /* preserved */
+  top: 20px;
+  right: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: var(--time-font-size);
+  font-weight: bold;
+  color: inherit;
+  background: var(--glass-bg);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  z-index: 9999;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* Small screens: make time display a bit smaller and less intrusive */
+@media (max-width: 420px){
+  #timeDisplay{ font-size: 1rem; padding: 8px 12px; right: 12px; left: auto; }
+  #settings{ left: 12px; top: 84px; font-size: 1rem; }
+}
+
+/* Helper utilities (optional but handy) */
+.sr-only{
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Focus styles for interactive elements (keyboard users) */
+button:focus, input:focus, select:focus, textarea:focus{
+  outline: 3px solid rgba(33,147,176,0.14);
+  outline-offset: 2px;
+}
+
+/* Keep a slightly stronger clickable affordance for suggestions */
+#suggestions li:hover{
+  transform: translateY(-1px);
 }
 
 
+
+/* -------------------------------------------------------------------- */
+/* -------------------------------------------------------------------- */
+/* Typography & content layout improvements (visual only, no JS impact) */
+
+/* Label above input ("what city you want?") */
+#what-city{
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+  opacity: 0.85;
+}
+
+/* Base typography scale */
+h1{
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin: 0.5em 0 0.3em;
+  letter-spacing: 0.4px;
+}
+
+h2{
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  margin: 0.3em 0;
+  opacity: 0.9;
+}
+
+p{
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  line-height: 1.5;
+  margin: 0.4em 0;
+}
+
+/* Center main content vertically nicer */
+main{
+  min-height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card-style containers for weather info */
+.card{
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 18px 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Inputs styling (search field etc.) */
+input, select, button{
+  font-size: 1rem;
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: none;
+}
+
+input{
+  width: min(320px, 90vw);
+}
+
+button{
+  cursor: pointer;
+  background: linear-gradient(to right, #2193b0, #6dd5fa);
+  color: white;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+button:hover{ opacity: 0.95; transform: translateY(-1px); }
+button:active{ transform: translateY(0); box-shadow: none; }
+
+/* Weather info layout */
+.weather-info{
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.temp{
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+}
+
+.desc{
+  text-transform: capitalize;
+  opacity: 0.9;
+}
+
+/* Suggestions dropdown better look but same structure */
+#suggestions{
+  background: rgba(255,255,255,0.9);
+  border-radius: 14px;
+  margin-top: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+#suggestions li{
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+/* Positioning helpers */
+.center-block{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stack{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Slight glass panel for sections */
+.panel{
+  background: rgba(255,255,255,0.18);
+  border-radius: 18px;
+  padding: 14px 16px;
+}
+
+/* -------------------------------------------------------------------- */
+/* End of file --------------------------------------------------------- */
