@@ -1,10 +1,9 @@
 import {getWeather,geolocationshow,initEvents} from "./API.js";
 import {state} from "./state.js"; //need to change
-import {renderweather, updateUnitIon,showSettings,hideSettings,showSuggestions,hidsSuggestions} from "./ui.js";
+import {renderweather, updateUnitIon,showSettings,hideSettings,showSuggestions,hidsSuggestions,getTime} from "./ui.js";
 
 
 
-//lets belive this works
 
 
 document.getElementById("weatherInput").addEventListener("submit", e => { //WORKS
@@ -88,6 +87,9 @@ if(!state.weatherData) return;
 
 document.addEventListener("DOMContentLoaded", () => {
   initEvents();
+
+  const initialTheme = getTime();
+  document.body.classList = initialTheme;
 });
 
 

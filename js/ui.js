@@ -11,6 +11,11 @@ export function renderweather(){
       const tempC = state.weatherData.main?.temp;
       const feelsC= state.weatherData.main.feels_like;
 
+      const theme = getTheme(tempC);
+      const timeTheme = getTime();
+
+      document.body.classList = theme;
+
       if (tempC == null || feelsC == null) {
         weatheResult.textContent = "Weather data unavailable.";
         return;
@@ -26,7 +31,7 @@ export function renderweather(){
         ? `${feelsC.toFixed(1)} °C`
         : `${((feelsC * 9/5) + 32).toFixed(1)} F`;
 
-
+      console.log(tempC); 
 
 
       weatheResult.innerHTML =`
@@ -37,13 +42,43 @@ export function renderweather(){
 
       `;
 
-      if(tempC > 10){
-        document.body.classList.toggle("range-10-20");
-      }
+
     };
 
 ;
 
+
+export function getTime(){
+  const now = new Date();
+const timeString = now.toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit',
+    hour12: false 
+  });
+
+  console.log(timeString); // here add in the giht cornor of the site 
+
+  const display = document.getElementById("timeDisplay");
+  if(display){
+    display.textContent = timeString;
+  }
+
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return 'morning';   // 5 AM to 11:59 AM
+  if (hour >= 12 && hour < 18) return 'afternoon'; // 12 PM to 5:59 PM
+  if (hour >= 18 && hour < 21) return 'evening';   // 6 PM to 8:59 PM
+  return 'night';
+
+}
+
+function getTheme(temp){
+if (temp <= 0) return 'freezing';
+if (temp > 0 && temp <= 15) return 'cool';
+if (temp > 15 && temp <= 25) return 'mild';
+if (temp > 25) return 'hot';
+return 'defult';
+}
 
 
 export function updateUnitIon(){

@@ -7,7 +7,11 @@
 }
 
 body{
+    min-height: 100vh;
     text-align: center;
+    transition: background 0.5s ease; /* Smoothly fades the colors */
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .loading{
@@ -55,6 +59,48 @@ body{
 }
 
 
-body.range-10-20{
-    background-color: yellow;
+body.freezing { background: linear-gradient(to bottom, #778899, #e0ffff); }
+body.cool { background: linear-gradient(to bottom, #2980b9, #6dd5fa); }
+body.mild { background: linear-gradient(to bottom, #f7971e, #ffd200); }
+body.hot { background: linear-gradient(to bottom, #e67e22, #e74c3c); }  
+/* Morning (5:00 AM - 11:59 AM) - Soft blues and pinks like a sunrise */
+body.morning {
+    background: linear-gradient(to bottom, #ffafbd, #ffc3a0, #2193b0);
+    color: #2c3e50;
+}
+
+/* Afternoon (12:00 PM - 5:59 PM) - Bright, clear sky blue */
+body.afternoon {
+    background: linear-gradient(to bottom, #2980b9, #6dd5fa, #ffffff);
+    color: #1a1a1a;
+}
+
+/* Evening (6:00 PM - 8:59 PM) - Deep oranges and purples for sunset */
+body.evening {
+    background: linear-gradient(to bottom, #41295a, #2F0743, #fb8c00);
+    color: white;
+}
+
+/* Night (9:00 PM - 4:59 AM) - Dark midnight blues and blacks */
+body.night {
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: #ecf0f1;
+}
+
+
+/* weather.css */
+#timeDisplay {
+    position: fixed;   /* Sticks to the screen even if you scroll */
+    top: 20px;
+    right: 20px;
+    font-family: 'Courier New', Courier, monospace; /* Monospace keeps numbers from jumping */
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: inherit;    /* Takes color from the body (white in night, black in day) */
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent box */
+    padding: 10px 20px;
+    border-radius: 30px;
+    backdrop-filter: blur(8px); /* Modern blurry glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 9999;     /* Makes sure it stays above everything else */
 }
